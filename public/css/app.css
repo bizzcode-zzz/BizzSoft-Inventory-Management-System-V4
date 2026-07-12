@@ -1,0 +1,182 @@
+/* =========================================================================
+   🏛️ INVENTORY MANAGEMENT SYSTEM V4 - MASTER CUSTOM CSS FILE
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   🌐 GLOBAL PAGE STRUCTURAL & LAYOUT ELEMENTS (Mula sa app.blade.php)
+   ------------------------------------------------------------------------- */
+.main-layout-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.global-navbar-menu {
+    background-color: #333;
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-btn-link {
+    text-decoration: none;
+}
+
+.main-content-wrapper {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+/* -------------------------------------------------------------------------
+   📦 FORM CONTAINERS & UTILITY CONTROLS (Mula sa CRUD Add Fields)
+   ------------------------------------------------------------------------- */
+.form-container {
+    max-width: 500px;
+}
+
+.search-container {
+    max-width: 400px;
+}
+
+/* -------------------------------------------------------------------------
+   📊 MASTER TABLES CUSTOM SPACERS & BOUNDS (Mula sa CRUD list tables)
+   ------------------------------------------------------------------------- */
+.action-column {
+    width: 180px;
+}
+
+.text-brand-primary {
+    font-size: 1.05rem;
+}
+
+.report-status {
+    font-size: 0.85rem;
+}
+
+/* -------------------------------------------------------------------------
+   🎨 FOOTER PADDING FIX COMPONENT 
+   ------------------------------------------------------------------------- */
+.footer-bumper-spacer {
+    clear: both;
+    min-height: 100px;
+}
+
+
+
+
+/* =========================================================================
+   📦 PRODUCTS UTILITY OVERRIDES (Final Clean-up Layer)
+   ========================================================================= */
+
+/* 🔍 Custom size para sa control box ng search element */
+.products-search-box {
+    max-width: 400px;
+}
+
+/* ⚙️ Custom exact constraint layout width para sa control action panel cells */
+.products-action-th-cell {
+    width: 180px;
+}
+
+/* 💰 Monospace typography scaling layout for currency text lines */
+.currency-price-font {
+    font-family: monospace;
+}
+
+
+/* =========================================================================
+   📊 UPGRADED ENGINE: MODERN PURE LIGHT MODE DASHBOARD CUSTOM OVERRIDES
+   ========================================================================= */
+
+/* 1. Statistics Cards Uniform Symmetry & Hover Zoom Effects */
+.dashboard-stat-card {
+    height: 100% !important;
+    min-height: 145px;
+    border-radius: 12px !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* Mag-zo-zoom out at magkakaroon ng modern soft clean shadow kapag itinuturo ng mouse bro */
+.dashboard-stat-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+}
+
+.stat-card-icon {
+    font-size: 1.6rem;
+}
+
+.stat-card-title {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+    color: #718096;
+}
+
+.stat-card-number {
+    font-size: 1.9rem;
+    letter-spacing: -0.5px;
+}
+
+/* 2. Critical Warning Highlight Glow for Low Stock Items box */
+.warning-border-glow {
+    border: 1px solid #dc3545 !important;
+}
+
+/* 3. Activity Ledger Live Feeds Row Item Smooth Highlighting */
+.hover-feed-item {
+    transition: background-color 0.2s ease !important;
+}
+
+.hover-feed-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.card-header .badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+}
+
+/* =========================================================================
+   📱 MODERN MOBILE RESPONSIVE ENGINE CALIBRATIONS (Media Queries Overrides)
+   ========================================================================= */
+
+/* Kapag ang lapad ng screen ay mas maliit sa 768px (Pang-cellphone at Small Tablets) */
+@media (max-width: 767.98px) {
+    
+    /* Liliitan ang padding ng main content box para magamit ang buong lapad ng screen */
+    .main-content-wrapper {
+        padding: 15px !important;
+    }
+    
+    /* Liliitan ng kaunti ang laki ng mga pamagat sa phone para magkasya */
+    h1, .h1 {
+        font-size: 1.75rem !important;
+    }
+    
+    h2, .h2 {
+        font-size: 1.4rem !important;
+    }
+    
+    /* Papantayin ang text input grids boxes para responsive sa touch controls */
+    .form-container, .search-container, .products-search-box {
+        max-width: 100% !important;
+    }
+    
+    /* Bibigyan ng swabeng soft scrolling feel ang tables sa touch screen lines gesture */
+    .table-responsive {
+        -webkit-overflow-scrolling: touch !important;
+        margin-bottom: 20px !important;
+    }
+}
