@@ -191,7 +191,7 @@ php artisan serve
 
 # 👨‍💻 Developer
 
-**Developer**
+Alwin John 
 
 BizzSoft Technologies
 
