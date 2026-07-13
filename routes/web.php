@@ -10,6 +10,11 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\DashboardController; 
 use App\Http\Controllers\ReportsController;
 
+// Pag na install na ang laravel sa hosting, ito yung idagdag
+Route::get('/', function () {
+    return redirect('/dashboard');
+});
+
 Route::resource('products', ProductController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('suppliers', SupplierController::class);
