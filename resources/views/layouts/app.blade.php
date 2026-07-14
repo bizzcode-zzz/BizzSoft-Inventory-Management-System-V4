@@ -76,8 +76,18 @@
                         <a class="nav-link {{ request()->routeIs('reports.*') ? 'active fw-bold' : '' }}" href="{{ route('reports.index') }}">
                             📁 Reports
                         </a>
-                    </li>
 
+                        
+                    </li>
+                    <li class="nav-item">
+    <form action="{{ route('logout') }}" method="POST" class="d-inline m-0">
+        @csrf
+        <!-- ✨ UPGRADE: Ginamitan ng klase na 'nav-link btn border-0 py-2' para makuha ang saktong font, kulay gray, at alignment ng Reports link mo bro -->
+        <button type="submit" class="nav-link btn border-0 py-2 text-start text-lg-center" style="background: none;">
+            🚪 Logout
+        </button>
+    </form>
+</li>
                 </ul>
             </div>
         </div>

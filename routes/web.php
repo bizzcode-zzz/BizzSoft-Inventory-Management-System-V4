@@ -2,33 +2,67 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
-use App\Http\Controllers\DashboardController; 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportsController;
 
-// Pag na install na ang laravel sa hosting, ito yung idagdag
+
+// Root
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect()->route('dashboard.index');
 });
 
-Route::resource('products', ProductController::class);
-Route::resource('categories', CategoryController::class);
-Route::resource('suppliers', SupplierController::class);
-Route::resource('purchases', PurchaseController::class);
-Route::resource('sales', SalesController::class);
-Route::resource('dashboard', DashboardController::class)
-    ->only('index');
 
-    // Gamit tau ng get na para for read-only pages
-Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-Route::get('/reports/sales', [ReportsController::class, 'sales'])->name('reports.sales');
-Route::get('/reports/purchases', [ReportsController::class, 'purchases'])->name('reports.purchases');
-Route::get('/reports/inventory', [ReportsController::class, 'inventory'])->name('reports.inventory');
-Route::get('/reports/low-stock', [ReportsController::class, 'lowstock'])->name('reports.low_stock');
+// Guest Routes
+Route::middleware('guest')->group(function () {
+
+    Route::get('/login', [AuthController::class, 'showLogin'])
+        ->name('login');
+
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('login.submit');
+
+});
 
 
+// Authenticated Routes
+Route::middleware('auth')->group(function () {
 
+    Route::resource('dashboard', DashboardController::class)
+        ->only('index');
+
+    Route::resource('products', ProductController::class);
+
+    Route::resource('categories', CategoryController::class);
+
+    Route::resource('suppliers', SupplierController::class);
+
+    Route::resource('purchases', PurchaseController::class);
+
+    Route::resource('sales', SalesController::class);
+
+    // Reports
+    Route::get('/reports', [ReportsController::class, 'index'])
+        ->name('reports.index');
+
+    Route::get('/reports/sales', [ReportsController::class, 'sales'])
+        ->name('reports.sales');
+
+    Route::get('/reports/purchases', [ReportsController::class, 'purchases'])
+        ->name('reports.purchases');
+
+    Route::get('/reports/inventory', [ReportsController::class, 'inventory'])
+        ->name('reports.inventory');
+
+    Route::get('/reports/low-stock', [ReportsController::class, 'lowstock'])
+        ->name('reports.low_stock');
+
+    Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
+
+});
