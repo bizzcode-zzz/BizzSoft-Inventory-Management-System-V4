@@ -102,7 +102,7 @@
 
     <!-- 🧦 GLOBAL FOOTER COMPONENT (Static Sticky Footer Pattern) -->
     <footer class="bg-dark text-white text-center p-3 mt-auto w-100 shadow-lg flex-shrink-0">
-        <p class="m-0">&copy; 2026 Inventory Management System</p>
+        <p class="m-0">&copy; 2026 Inventory Management System - Feature Branch</p>
     </footer>
 
     <!-- INIWAN ANG SAKTONG JS BUNDLE VERSION MO BRO -->
