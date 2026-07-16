@@ -100,10 +100,14 @@
         @yield('content')
     </main>
 
-<!-- 🧦 GLOBAL FOOTER COMPONENT (Static Sticky Footer Pattern) -->
-<footer class="bg-dark text-white text-center py-3 mt-auto">
-    <p class="m-0">&copy; 2026 Inventory Management System - Main Branch</p>
-</footer>
+
+
+
+    <!-- 🧦 GLOBAL FOOTER COMPONENT (Static Sticky Footer Pattern) -->
+    <footer class="bg-dark text-white text-center p-3 mt-auto w-100 shadow-lg flex-shrink-0">
+        <p class="m-0">&copy; 2026 Inventory Management System</p>
+    </footer>
+
 
     <!-- INIWAN ANG SAKTONG JS BUNDLE VERSION MO BRO -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
