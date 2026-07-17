@@ -35,4 +35,7 @@ jobs:
             echo "Running Database Migrations..."
             php artisan migrate --force
 
-            echo "Deployment Step 3 Complete!"
+            echo "Optimizing Laravel..."
+            php artisan optimize
+
+            echo "Deployment Complete!"
