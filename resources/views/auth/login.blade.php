@@ -37,7 +37,7 @@
 
                         <!-- 🎯 UNIFORM RESUABLE FULL-WIDTH SUBMIT BUTTON -->
                         <button type="submit" class="btn btn-primary w-100 py-2 font-weight-bold shadow-sm">
-                            🔐 Login to Dashboard1
+                            🔐 Login to Dashboard
                         </button>
 
                     </form>
