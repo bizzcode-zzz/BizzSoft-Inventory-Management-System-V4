@@ -29,4 +29,7 @@ jobs:
             echo "Pulling latest code..."
             git pull origin main
 
-            echo "Deployment Step 1 Complete!"
+            echo "Installing Composer Dependencies..."
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            echo "Deployment Step 2 Complete!"
