@@ -30,12 +30,12 @@ jobs:
             git pull origin main || exit 1
 
             echo "Installing Composer Dependencies..."
-            composer install --no-interaction --prefer-dist --optimize-autoloader || exit 1
+            /opt/alt/php83/usr/bin/php -d "disable_functions=" /usr/local/bin/composer2 install --no-interaction --prefer-dist --optimize-autoloader || exit 1
 
             echo "Running Database Migrations..."
-            php artisan migrate --force || exit 1
+            /opt/alt/php83/usr/bin/php artisan migrate --force || exit 1
 
             echo "Optimizing Laravel..."
-            php artisan optimize || exit 1
+            /opt/alt/php83/usr/bin/php artisan optimize || exit 1
 
             echo "✅ Deployment completed successfully!"
