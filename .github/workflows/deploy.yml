@@ -21,12 +21,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 65002
           script: |
-  cd /home/u180948312/laravel_app
+            cd /home/u180948312/laravel_app
 
-  echo "Current Directory:"
-  pwd
+            echo "Current Directory:"
+            pwd
 
-  echo "Pulling latest code..."
-  git pull origin main
+            echo "Pulling latest code..."
+            git pull origin main
 
-  echo "Deployment Step 1 Complete!"
+            echo "Deployment Step 1 Complete!"
