@@ -13,8 +13,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Display Current Directory
-        run: pwd
-
-      - name: List Files
-        run: ls -la
+      - name: Deploy to Hostinger
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 145.79.28.207
+          username: u180948312
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 65002
+          script: |
+            cd /home/u180948312/laravel_app
+            pwd
+            git status
