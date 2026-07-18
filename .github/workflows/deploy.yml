@@ -35,6 +35,9 @@ jobs:
             echo "Running Database Migrations..."
             /opt/alt/php83/usr/bin/php artisan migrate --force || exit 1
 
+            echo "Running Database Seeders..."
+            /opt/alt/php83/usr/bin/php artisan db:seed --force || exit 1
+
             echo "Optimizing Laravel..."
             /opt/alt/php83/usr/bin/php artisan optimize || exit 1
 
