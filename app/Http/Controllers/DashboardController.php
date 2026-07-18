@@ -14,6 +14,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
+
+       if (! auth()->user()->hasPermission('dashboard.view')) {
+        abort(403);
+    }
+    
         // 📊 1. KUKUHA NG REAL-TIME COUNT SA BAWAT TABLE:
         $totalProducts   = Product::count();
         $totalCategories = Category::count();

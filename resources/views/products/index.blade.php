@@ -18,6 +18,9 @@
     <!-- =========================================================================
          🎯 1. BUSINESS-CENTRIC HEADING SECTION
          ========================================================================= -->
+        
+
+
     <div class="mb-4">
         <h1 class="font-weight-bold">📦 Product Management</h1>
         <p class="text-muted" style="font-size: 1.1rem;">Manage all products available in your inventory.</p>
@@ -27,6 +30,8 @@
     <!-- =========================================================================
          🎯 3. FORM CARD: ADD PRODUCT FORM SECTION
          ========================================================================= -->
+         @if(auth()->user()->hasPermission('products.create'))
+
     <div class="card shadow-sm mb-4 border">
         <div class="card-header bg-dark text-white py-3">
             <h5 class="m-0 font-weight-bold">📦 Add Product</h5>
@@ -80,7 +85,7 @@
             </form>
         </div>
     </div>
-
+@endif
 
     <!-- =========================================================================
          🎯 4 & 5. PRODUCT LIST & SEARCH OPERATIONS TABLE CARD SECTION
@@ -154,12 +159,19 @@
                             
                             <!-- 🎯 6. UNIFORM BOOTSTRAP BUTTONS WITH ICONS -->
                             <td>
+
+
                                 <!-- ✏️ EDIT LINK BUTTON -->
+                                @if(auth()->user()->hasPermission('products.edit'))
+
                                 <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary font-weight-bold me-1">
                                     ✏️ Edit
                                 </a>
+                                @endif
 
                                 <!-- 🗑️ DELETE FORM TRIGER BUTTON -->
+                                 @if(auth()->user()->hasPermission('products.delete'))
+
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete this item?');">
                                     @csrf
                                     @method('DELETE')
@@ -167,6 +179,10 @@
                                         🗑️ Delete
                                     </button>
                                 </form>
+                                @endif
+
+
+                                
                             </td>
                         </tr>
                     @empty

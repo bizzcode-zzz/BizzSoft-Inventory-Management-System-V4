@@ -12,6 +12,12 @@ class SupplierController extends Controller
     // Kasama na dito ang search
     public function index(Request $request) 
     {
+
+    if (! auth()->user()->hasPermission('suppliers.view')) {
+    abort(403);
+}
+
+
         // Kukuha ng tinype ng user sa search input field
         $search = $request->input('search');
 
@@ -30,6 +36,10 @@ class SupplierController extends Controller
     // I-save ang bagong supplier
     public function store(SupplierRequest $request)
     {
+
+    if (! auth()->user()->hasPermission('suppliers.create')) {
+    abort(403);
+}
         Supplier::create($request->validated());
         return redirect()->route('suppliers.index')->with('success', 'Supplier saved successfully!');
     }
@@ -37,12 +47,22 @@ class SupplierController extends Controller
     // Ipakita ang edit form
     public function edit(Supplier $supplier)
     {
+
+    if (! auth()->user()->hasPermission('suppliers.edit')) {
+    abort(403);
+}
+
         return view('suppliers.edit', compact('supplier'));
     }
 
     // I-save ang in-edit na supplier
     public function update(SupplierRequest $request, Supplier $supplier)
     {
+
+    if (! auth()->user()->hasPermission('suppliers.edit')) {
+    abort(403);
+}
+
         $supplier->update($request->validated());
         return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully!');
     }
@@ -50,6 +70,11 @@ class SupplierController extends Controller
     // Burahin ang supplier
     public function destroy(Supplier $supplier)
     {
+
+    if (! auth()->user()->hasPermission('suppliers.delete')) {
+    abort(403);
+}
+
         $supplier->delete();
         return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully!');
     }

@@ -11,6 +11,11 @@ class CategoryController extends Controller
     // Kasama na dito ang search
     public function index(Request $request) // ⚠️ Siguraduhing may Request $request sa loob ng panaklong
 {
+
+if (! auth()->user()->hasPermission('categories.view')) {
+    abort(403);
+}
+
     // Kukuha ng tinype ng user sa search input field
     $search = $request->input('search');
 
@@ -27,6 +32,12 @@ class CategoryController extends Controller
     // I-save ang bagong kategorya
     public function store(CategoryRequest $request)
     {
+
+    if (! auth()->user()->hasPermission('categories.create')) {
+    abort(403);
+}
+
+
         Category::create($request->validated());
         return redirect()->route('categories.index')->with('success', 'Category saved successfully!');
     }
@@ -36,12 +47,23 @@ class CategoryController extends Controller
     // Ipakita ang edit form
     public function edit(Category $category)
 {
+
+    if (! auth()->user()->hasPermission('categories.edit')) {
+    abort(403);
+}
+
     return view('categories.edit', compact('category'));
 }
+
 
     // I-save ang in-edit na kategorya
     public function update(CategoryRequest $request, Category $category)
     {
+
+    if (! auth()->user()->hasPermission('categories.edit')) {
+    abort(403);
+}
+
         $category->update($request->validated());
         return redirect()->route('categories.index');
     }
@@ -50,6 +72,11 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
          
+
+    if (! auth()->user()->hasPermission('categories.delete')) {
+    abort(403);
+}
+
         $category->delete(); // ⚠️ Dahil may onDelete('cascade') tayo sa migration, automatic ding mabubura ang mga produkto sa ilalim nito!
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');

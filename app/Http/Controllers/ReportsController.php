@@ -14,6 +14,11 @@ class ReportsController extends Controller
      */
     public function index()
     {
+
+    if (! auth()->user()->hasPermission('reports.view')) {
+        abort(403);
+    }
+
         return view('reports.index');
     }
 
@@ -22,6 +27,9 @@ class ReportsController extends Controller
      */
     public function sales()
     {
+        if (! auth()->user()->hasPermission('reports.view')) {
+        abort(403);
+    }
         $sales = Sales::with('product')->latest()->get();
         return view('reports.sales', compact('sales'));
     }
@@ -31,6 +39,9 @@ class ReportsController extends Controller
      */
     public function purchases()
     {
+        if (! auth()->user()->hasPermission('reports.view')) {
+        abort(403);
+    }
         $purchases = Purchase::with(['product', 'supplier'])->latest()->get();
         return view('reports.purchases', compact('purchases'));
     }
@@ -40,6 +51,9 @@ class ReportsController extends Controller
      */
     public function inventory()
     {
+        if (! auth()->user()->hasPermission('reports.view')) {
+        abort(403);
+    }
         // Kukunin ang lahat ng produkto kasama ang kategorya nito
         $products = Product::with('category')->get();
         return view('reports.inventory', compact('products'));
@@ -50,6 +64,9 @@ class ReportsController extends Controller
      */
     public function lowstock()
     {
+        if (! auth()->user()->hasPermission('reports.view')) {
+        abort(403);
+    }
         // Gagamit ng whereColumn para masala lang ang mga umabot sa threshold limit nila
         $lowStockProducts = Product::with('category')
             ->whereColumn('stock', '<=', 'reorder_level')

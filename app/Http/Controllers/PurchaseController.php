@@ -17,6 +17,11 @@ class PurchaseController extends Controller
     public function index(Request $request) 
     {
         
+if (! auth()->user()->hasPermission('purchases.view')) {
+    abort(403);
+}
+
+
       // Kukuha ng tinype ng user sa search input field
         $search = $request->input('search');
 
@@ -45,6 +50,9 @@ class PurchaseController extends Controller
      public function store(PurchaseRequest $request)
 {
 
+if (! auth()->user()->hasPermission('purchases.create')) {
+    abort(403);
+}
  
 DB::transaction(function () use ($request) {
 
@@ -71,6 +79,13 @@ return redirect()->route('purchases.index')
      */
     public function destroy(Purchase $purchase)
     {
+
+    if (! auth()->user()->hasPermission('purchases.delete')) {
+    abort(403);
+
+    
+}
+        DB::transaction(function () use ($purchase) {
         // 1. Hanapin muna kung anong produkto ang kasali sa transaksyong ito
         $product = Product::find($purchase->product_id);
 
@@ -86,7 +101,7 @@ return redirect()->route('purchases.index')
 
         // 4. Saka natin tuluyang buburahin ang linya ng transaksyon sa purchases table
         $purchase->delete();
-
+    });
         return redirect()->route('purchases.index')->with('success', 'Purchase record deleted and product stock automatically adjusted!');
     }
 

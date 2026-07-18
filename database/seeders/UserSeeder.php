@@ -2,22 +2,32 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-    User::create([
-        'name' => 'Admin',
-        'email' => 'admin@bizzsoft.dev',
-        'password' => Hash::make('password'),
-        'role' => 'admin',
-]);
+        User::firstOrCreate(
+            ['email' => 'admin@bizzsoft.dev'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password'),
+                'role_id' => 1,
+                'status' => 'active',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'staff@bizzsoft.dev'],
+            [
+                'name' => 'Staff',
+                'password' => Hash::make('password'),
+                'role_id' => 2,
+                'status' => 'active',
+            ]
+        );
     }
 }

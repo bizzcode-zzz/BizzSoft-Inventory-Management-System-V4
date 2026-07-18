@@ -16,6 +16,11 @@ class SalesController extends Controller
      */
     public function index(Request $request)
     {
+
+    if (! auth()->user()->hasPermission('sales.view')) {
+    abort(403);
+}
+
         $search = $request->input('search');
 
         // Advanced logical grouping ($q) para sa Search bar ng sales transaction
@@ -38,6 +43,12 @@ class SalesController extends Controller
      */
         public function store(SalesRequest $request)
     {
+
+    if (! auth()->user()->hasPermission('sales.create')) {
+    abort(403);
+}
+
+
         // 🏛️ 1. Hanapin muna si product sa database para makilala siya ng computer
         $product = Product::find($request->product_id);
 
@@ -71,6 +82,12 @@ class SalesController extends Controller
     // ⚠️ DAPAT SINGULAR: Pinalitan ang Sales $sales naging Sales $sale
     public function destroy(Sales $sale)
     {
+
+
+    if (! auth()->user()->hasPermission('sales.delete')) {
+    abort(403);
+}
+    DB::transaction(function () use ($sale) {
         // 1. Hanapin kung anong produkto ang kasali sa transaksyong ito gamit ang singular $sale
         $product = Product::find($sale->product_id);
 
@@ -83,7 +100,7 @@ class SalesController extends Controller
 
         // 3. Saka tuluyang buburahin ang transaksyon record gamit ang singular $sale
         $sale->delete();
-
+    });
         return redirect()->route('sales.index')->with('success', 'Sales record deleted and product stock automatically adjusted!');
     }
 
