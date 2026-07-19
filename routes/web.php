@@ -10,6 +10,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\UserController;
 
 
 // Root
@@ -45,6 +46,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('purchases', PurchaseController::class);
 
     Route::resource('sales', SalesController::class);
+
+
+    Route::resource('users', UserController::class);
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
+    ->name('users.toggle-status');
+    Route::get('/users/{user}/reset-password', [UserController::class, 'showResetPassword'])
+    ->name('users.reset-password');
+    Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword'])
+    ->name('users.reset-password.update');
+
 
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])

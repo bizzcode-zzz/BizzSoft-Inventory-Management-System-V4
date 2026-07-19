@@ -79,6 +79,16 @@
 
                         
                     </li>
+
+                                        <!-- 👤 Users -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('users.*') ? 'active fw-bold' : '' }}" href="{{ route('users.index') }}">
+                            👤 Users
+                        </a>
+                    </li>
+
+
+
                     <li class="nav-item">
     <form action="{{ route('logout') }}" method="POST" class="d-inline m-0">
         @csrf
