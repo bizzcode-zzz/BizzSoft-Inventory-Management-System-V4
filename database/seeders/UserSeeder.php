@@ -9,25 +9,39 @@ use Illuminate\Support\Facades\Hash;
 class UserSeeder extends Seeder
 {
     public function run(): void
-    {
-        User::firstOrCreate(
-            ['email' => 'admin@bizzsoft.dev'],
-            [
-                'name' => 'Admin',
-                'password' => Hash::make('password'),
-                'role_id' => 1,
-                'status' => 'active',
-            ]
-        );
+{
+    $admin = User::firstOrCreate(
+        ['email' => 'admin@bizzsoft.dev'],
+        [
+            'name' => 'Admin',
+            'password' => Hash::make('password'),
+        ]
+    );
 
-        User::firstOrCreate(
-            ['email' => 'staff@bizzsoft.dev'],
-            [
-                'name' => 'Staff',
-                'password' => Hash::make('password'),
-                'role_id' => 2,
-                'status' => 'active',
-            ]
-        );
+    $admin->fill([
+        'role_id' => 1,
+        'status'  => 'active',
+    ]);
+
+    if ($admin->isDirty()) {
+        $admin->save();
     }
+
+    $staff = User::firstOrCreate(
+        ['email' => 'staff@bizzsoft.dev'],
+        [
+            'name' => 'Staff',
+            'password' => Hash::make('password'),
+        ]
+    );
+
+    $staff->fill([
+        'role_id' => 2,
+        'status'  => 'active',
+    ]);
+
+    if ($staff->isDirty()) {
+        $staff->save();
+    }
+}
 }
