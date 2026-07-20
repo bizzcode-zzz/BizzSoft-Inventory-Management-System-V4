@@ -8,6 +8,8 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Services\ActivityLogger;
+use App\Services\AuditTrailService;
 
 class UserController extends Controller
 {
@@ -56,7 +58,7 @@ class UserController extends Controller
         abort(403);
     }
 
-    User::create([
+    $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
 
@@ -66,6 +68,20 @@ class UserController extends Controller
 
         'status' => $request->status,
     ]);
+
+
+//start activity logs
+    $description =
+    "Created user: {$user->name}.";
+
+    ActivityLogger::log(
+    'Created',
+    'User',
+    $description
+);
+    //end activity logs
+
+
 
     return redirect()
         ->route('users.index')
@@ -105,6 +121,9 @@ class UserController extends Controller
 
     $data = $request->validated();
 
+
+    $oldUser = $user->replicate();
+
     // Kapag may bagong password, i-hash ito.
     if (! empty($data['password'])) {
         $data['password'] = Hash::make($data['password']);
@@ -114,6 +133,24 @@ class UserController extends Controller
     }
 
     $user->update($data);
+
+
+
+    // start activity logs ginamit dito auditTrailService.php
+    AuditTrailService::logUpdate(
+    $oldUser,
+    $user,
+    'User',
+    [
+        'name' => 'Name',
+        'email' => 'Email',
+        'role_id' => 'Role',
+    ],
+    'name'
+);
+// end activity logs
+
+
 
     return redirect()
         ->route('users.index')

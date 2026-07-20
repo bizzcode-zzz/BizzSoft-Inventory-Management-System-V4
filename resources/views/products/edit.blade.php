@@ -70,7 +70,7 @@
                 <!-- REORDER POINT THRESHOLD LIMIT INPUT -->
                 <div class="mb-4">
                     <label class="form-label font-weight-bold">Reorder Level / Threshold:</label>
-                    <input type="number" name="reorder_level" value="{{ old('reorder_level', $product->reorder_level ?? 5) }}" class="form-control border-dark" required>
+                    <input type="number" name="reorder_level" value="{{ old('reorder_level', $product->reorder_level) }}" class="form-control border-dark" required>
                     <small class="text-muted">Dynamic threshold value used for automated low stock dashboard alerts.</small>
                 </div>
 

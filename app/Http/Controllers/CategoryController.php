@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category; // ⚠️ I-import ang Category Model
 use App\Http\Requests\CategoryRequest; 
+use App\Services\ActivityLogger;
+use App\Services\AuditTrailService;
 class CategoryController extends Controller
 {
     // Ipakita ang listahan ng mga kategorya at ang save form
@@ -38,7 +40,16 @@ if (! auth()->user()->hasPermission('categories.view')) {
 }
 
 
-        Category::create($request->validated());
+        $category = Category::create($request->validated());
+
+
+// PARA SA ACTIVITY LOG: Tanggalin ito kung wala pa kayong Activity Log module para maiwasan ang Error 500.
+        ActivityLogger::log(
+    'Created',
+    'Category',
+    "Created category: {$category->category_name}"
+);
+
         return redirect()->route('categories.index')->with('success', 'Category saved successfully!');
     }
 
@@ -56,18 +67,40 @@ if (! auth()->user()->hasPermission('categories.view')) {
 }
 
 
+
+
     // I-save ang in-edit na kategorya
-    public function update(CategoryRequest $request, Category $category)
-    {
-
+public function update(CategoryRequest $request, Category $category)
+{
     if (! auth()->user()->hasPermission('categories.edit')) {
-    abort(403);
-}
-
-        $category->update($request->validated());
-        return redirect()->route('categories.index');
+        abort(403);
     }
 
+        // Kasama to sa activity log oldproduct 
+    $oldCategory = $category->replicate();
+
+    $category->update($request->validated());
+
+// ENTRY PARA SA ACTIVITY LOG gamit dito ay auditTralService.php
+    AuditTrailService::logUpdate(
+    $oldCategory,
+    $category,
+    'Category',
+    [
+        'category_name' => 'Category Name',
+    ],
+    'category_name'
+);
+// CLOSED PARA SA ACTIVITY LOG
+
+    return redirect()->route('categories.index');
+}
+
+
+
+
+
+    
     // Burahin ang kategorya
     public function destroy(Category $category)
     {
@@ -75,9 +108,18 @@ if (! auth()->user()->hasPermission('categories.view')) {
 
     if (! auth()->user()->hasPermission('categories.delete')) {
     abort(403);
-}
+}       // Kasama to sa activity log categoryname 
+        $categoryName = $category->category_name;
 
         $category->delete(); // ⚠️ Dahil may onDelete('cascade') tayo sa migration, automatic ding mabubura ang mga produkto sa ilalim nito!
+
+        // Activity log 
+         ActivityLogger::log(
+        'Deleted',
+        'Category',
+        "Deleted category: {$categoryName}"
+    );
+
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
     }

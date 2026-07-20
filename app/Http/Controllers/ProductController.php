@@ -5,6 +5,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
+use App\Services\ActivityLogger;
+use App\Services\AuditTrailService;
 
 class ProductController extends Controller
 {
@@ -28,16 +30,30 @@ class ProductController extends Controller
 }
  
 
-    public function store(ProductRequest $request)
+
+public function store(ProductRequest $request)
 {
-  if (! auth()->user()->hasPermission('products.create')) {
-    abort(403);
-}
+    if (! auth()->user()->hasPermission('products.create')) {
+        abort(403);
+    }
 
     Product::create($request->validated());
 
+// PARA SA ACTIVITY LOG: Tanggalin ito kung wala pa kayong Activity Log module para maiwasan ang Error 500.
+    ActivityLogger::log(
+        'Create',
+        'Products',
+        'Created product: ' . $request->name
+    );
+
     return redirect('/products');
 }
+
+
+
+
+
+
 
    public function edit(Product $product)
 {
@@ -48,17 +64,41 @@ class ProductController extends Controller
     return view('products.edit', compact('product', 'categories'));
 }
 
-    public function update(ProductRequest $request, Product $product)
+
+
+public function update(ProductRequest $request, Product $product)
 {
     if (! auth()->user()->hasPermission('products.edit')) {
-    abort(403);
-}
+        abort(403);
+    }
+    // Kasama to sa activity log oldproduct 
+    $oldProduct = $product->replicate();
+ 
 
-    $product->update($request->validated());
+  $product->update($request->validated());
 
+     
+// ENTRY PARA SA ACTIVITY LOG ang ginamit dito ay auditTrailService.php
+AuditTrailService::logUpdate(
+    $oldProduct,
+    $product,
+    'Product',
+    [
+        'name' => 'Name',
+        'price' => 'Price',
+        'stock' => 'Stock',
+        'reorder_level' => 'Reorder Level',
+    ],
+    'name'
+);
+// CLOSED PARA SA ACTIVITY LOG
 
     return redirect('/products');
 }
+
+
+
+
 
     public function destroy(Product $product)
 {

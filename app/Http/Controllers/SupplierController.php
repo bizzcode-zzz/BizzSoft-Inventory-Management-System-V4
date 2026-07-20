@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Supplier; 
 use App\Http\Requests\SupplierRequest; 
-
+use App\Services\ActivityLogger;
+use App\Services\AuditTrailService;
 class SupplierController extends Controller
 {
     // Ipakita ang listahan ng mga supplier at ang save form
@@ -34,15 +35,25 @@ class SupplierController extends Controller
     }
 
     // I-save ang bagong supplier
-    public function store(SupplierRequest $request)
-    {
-
+   public function store(SupplierRequest $request)
+{
     if (! auth()->user()->hasPermission('suppliers.create')) {
-    abort(403);
-}
-        Supplier::create($request->validated());
-        return redirect()->route('suppliers.index')->with('success', 'Supplier saved successfully!');
+        abort(403);
     }
+
+    $supplier = Supplier::create($request->validated());
+
+
+// Activity Logs Delete ito kong D pa need
+    ActivityLogger::log(
+        'Created',
+        'Supplier',
+        "Created supplier: {$supplier->supplier_name}"
+    );
+
+    return redirect()->route('suppliers.index')
+        ->with('success', 'Supplier saved successfully!');
+}
 
     // Ipakita ang edit form
     public function edit(Supplier $supplier)
@@ -55,27 +66,65 @@ class SupplierController extends Controller
         return view('suppliers.edit', compact('supplier'));
     }
 
+
+
+
     // I-save ang in-edit na supplier
     public function update(SupplierRequest $request, Supplier $supplier)
-    {
-
+{
     if (! auth()->user()->hasPermission('suppliers.edit')) {
-    abort(403);
-}
-
-        $supplier->update($request->validated());
-        return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully!');
+        abort(403);
     }
+
+
+ // Kasama to sa activity log oldproduct 
+    $oldSupplier = $supplier->replicate();
+
+
+    $supplier->update($request->validated());
+
+
+// ENTRY PARA SA ACTIVITY LOG gamit nit ay auditTrailService.php
+    AuditTrailService::logUpdate(
+    $oldSupplier,
+    $supplier,
+    'Supplier',
+    [
+        'supplier_name' => 'Supplier Name',
+        'contact_person' => 'Contact Person',
+        'phone_number' => 'Phone Number',
+        'email' => 'Email',
+        'address' => 'Address',
+    ],
+    'supplier_name'
+);
+// CLOSED PARA SA ACTIVITY LOG
+
+    return redirect()->route('suppliers.index')
+        ->with('success', 'Supplier updated successfully!');
+}
 
     // Burahin ang supplier
-    public function destroy(Supplier $supplier)
-    {
-
+ public function destroy(Supplier $supplier)
+{
     if (! auth()->user()->hasPermission('suppliers.delete')) {
-    abort(403);
-}
-
-        $supplier->delete();
-        return redirect()->route('suppliers.index')->with('success', 'Supplier deleted successfully!');
+        abort(403);
     }
+
+    // Kasama sa activitylog suppliername
+    $supplierName = $supplier->supplier_name;
+
+    $supplier->delete();
+
+
+// Activity Log
+    ActivityLogger::log(
+        'Deleted',
+        'Supplier',
+        "Deleted supplier: {$supplierName}"
+    );
+
+    return redirect()->route('suppliers.index')
+        ->with('success', 'Supplier deleted successfully!');
+}
 }

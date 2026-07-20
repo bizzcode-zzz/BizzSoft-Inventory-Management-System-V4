@@ -7,7 +7,7 @@ use App\Models\Sales;
 use App\Models\Product;
 use App\Http\Requests\SalesRequest; // ⚠️ I-import ang request file
 use Illuminate\Support\Facades\DB; // ✨ para sa DB::transaction(function ()
-
+use App\Services\ActivityLogger;
 
 class SalesController extends Controller
 {
@@ -64,17 +64,36 @@ class SalesController extends Controller
         DB::transaction(function () use ($request, $product) {
             
         // 🏛️ 3. Kung sapat naman ang stock at lumusot sa harang, i-save na ang benta sa sales table
-        Sales::create($request->validated());
+        $sale = Sales::create($request->validated());
+
+
+        // enter activity logs
+        $description =
+    "Sold {$sale->quantity} units of {$sale->product->name}.";
+    // closed activity logs
 
         // 🏛️ 4. Babawasan na natin ang stock dahil ligtas at na-save na ang transaksyon
         if ($product) {
             $product->stock -= $request->quantity;
             $product->save();
         }
+
+
+// enter activity logs
+ActivityLogger::log(
+    'Created',
+    'Sales',
+    $description
+);
+// closed activity logs
         });
 
         return redirect()->route('sales.index')->with('success', 'Sales transaction saved and product stock updated!');
     }
+
+
+
+
 
         /**
      * Remove the specified resource from storage.
@@ -97,9 +116,24 @@ class SalesController extends Controller
             $product->stock += $sale->quantity;
             $product->save();
         }
+// start  activity logs
+$description =
+    "Deleted sale of {$sale->quantity} units of {$sale->product->name}.";
+// end activity logs
+
 
         // 3. Saka tuluyang buburahin ang transaksyon record gamit ang singular $sale
         $sale->delete();
+        
+// start  activity logs
+ActivityLogger::log(
+    'Deleted',
+    'Sales',
+    $description
+);
+// end activity logs
+
+
     });
         return redirect()->route('sales.index')->with('success', 'Sales record deleted and product stock automatically adjusted!');
     }

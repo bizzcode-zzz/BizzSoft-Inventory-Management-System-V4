@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Http\Requests\PurchaseRequest; // ⚠️ Import ang ginawa nating request validation file
 use Illuminate\Support\Facades\DB;
+use App\Services\ActivityLogger;
 
 class PurchaseController extends Controller
 {
@@ -56,7 +57,7 @@ if (! auth()->user()->hasPermission('purchases.create')) {
  
 DB::transaction(function () use ($request) {
 
-    Purchase::create($request->validated());
+    $purchase = Purchase::create($request->validated());
 
     $product = Product::find($request->product_id);
 
@@ -64,6 +65,17 @@ DB::transaction(function () use ($request) {
         $product->stock += $request->quantity;
         $product->save();
     }
+
+    //activity logs
+$description =
+    "Purchased {$purchase->quantity} units of {$purchase->product->name} " .
+    "from {$purchase->supplier->supplier_name}.";
+    ActivityLogger::log(
+    'Created',
+    'Purchase',
+    $description
+);
+
 
 });
 
@@ -99,9 +111,25 @@ return redirect()->route('purchases.index')
             $product->save();
         }
 
+        // Start Activity Log Description
+$description =
+    "Deleted purchase of {$purchase->quantity} units of {$purchase->product->name} " .
+    "from {$purchase->supplier->supplier_name}.";
+// close Activity Log Description
+
+
         // 4. Saka natin tuluyang buburahin ang linya ng transaksyon sa purchases table
         $purchase->delete();
-    });
+    
+
+    // Start Activity Log Description
+    ActivityLogger::log(
+    'Deleted',
+    'Purchase',
+    $description
+);
+// close Activity Log Description
+});
         return redirect()->route('purchases.index')->with('success', 'Purchase record deleted and product stock automatically adjusted!');
     }
 

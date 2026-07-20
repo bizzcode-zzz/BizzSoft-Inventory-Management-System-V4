@@ -11,6 +11,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityLogController;
 
 
 // Root
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
     ->name('users.reset-password');
     Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword'])
     ->name('users.reset-password.update');
+
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])
+    ->name('activity-logs.index');
 
 
     // Reports

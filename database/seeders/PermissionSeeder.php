@@ -15,6 +15,8 @@ class PermissionSeeder extends Seeder
 
             'reports.view',
 
+            'activity_logs.view',
+
             'products.view',
             'products.create',
             'products.edit',
