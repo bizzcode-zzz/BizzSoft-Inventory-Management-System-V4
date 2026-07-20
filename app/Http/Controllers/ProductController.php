@@ -41,10 +41,10 @@ public function store(ProductRequest $request)
 
 // PARA SA ACTIVITY LOG: Tanggalin ito kung wala pa kayong Activity Log module para maiwasan ang Error 500.
     ActivityLogger::log(
-        'Create',
-        'Products',
-        'Created product: ' . $request->name
-    );
+    'Created',
+    'Product',
+    'Created product: ' . $request->name
+);
 
     return redirect('/products');
 }
