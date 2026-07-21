@@ -13,6 +13,7 @@ class Sales extends Model
         'quantity',
         'selling_price',
         'sales_date',
+        'line_total',
     ];
 
     /**

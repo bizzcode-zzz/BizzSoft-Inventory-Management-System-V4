@@ -64,7 +64,13 @@ class SalesController extends Controller
         DB::transaction(function () use ($request, $product) {
             
         // 🏛️ 3. Kung sapat naman ang stock at lumusot sa harang, i-save na ang benta sa sales table
-        $sale = Sales::create($request->validated());
+        //  $sale = Sales::create($request->validated()); <- dati ito yung sa baba na code na pilalit para maka pag record ng total sales sa database
+        $data = $request->validated();
+
+        $data['line_total'] =
+        $data['quantity'] * $data['selling_price'];
+
+        $sale = Sales::create($data);
 
 
         // enter activity logs

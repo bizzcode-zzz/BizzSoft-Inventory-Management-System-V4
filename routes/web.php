@@ -69,14 +69,31 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/sales', [ReportsController::class, 'sales'])
         ->name('reports.sales');
 
+        // ✅ NEW SALES PRINT ROUTE
+    Route::get('/reports/sales/print', [ReportsController::class, 'salesPrint'])
+    ->name('reports.sales.print');
+
     Route::get('/reports/purchases', [ReportsController::class, 'purchases'])
         ->name('reports.purchases');
+
+// ✅ NEW PURCHASE PRINT ROUTE
+        Route::get('/reports/purchases/print', [ReportsController::class, 'purchasesPrint'])
+    ->name('reports.purchases.print');
 
     Route::get('/reports/inventory', [ReportsController::class, 'inventory'])
         ->name('reports.inventory');
 
+// ✅ NEW INVENTORY PRINT ROUTE
+        Route::get('/reports/inventory/print', [ReportsController::class, 'inventoryPrint'])
+    ->name('reports.inventory.print');
+
     Route::get('/reports/low-stock', [ReportsController::class, 'lowstock'])
         ->name('reports.low_stock');
+        
+// ✅ NEW INVENTORY PRINT ROUTE
+        Route::get('/reports/low-stock/print', [ReportsController::class, 'lowStockPrint'])
+    ->name('reports.low-stock.print');
+
 
     Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
