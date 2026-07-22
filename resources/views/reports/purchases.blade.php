@@ -3,16 +3,17 @@
 @section('content')
 
 
-    <h2 class="mb-0">📋 Purchase Report Ledger</h2>
-
-    <div>
-
-        <div class="container mt-4" style="color: black;">
     <div class="mb-3">
         <a href="{{ route('reports.index') }}" class="text-decoration-none">← Back to Reports</a>
     </div>
-    <div class="d-flex justify-content-between align-items-center mb-4">
 
+     
+
+        <div class="container mt-4" style="color: black;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">📋 Purchase Report Ledger</h2>
+ 
         <a
     href="{{ route('reports.purchases.print', request()->query()) }}"
     target="_blank"

@@ -39,13 +39,17 @@
                 <!-- 1. PRODUCT DROPDOWN SELECTION FIELD -->
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Select Product to Sell:</label>
-                    <select name="product_id" class="form-select border-dark" required>
-                        <option value="">-- Choose Product --</option>
-                        @foreach($products as $product)
-                            <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                                {{ $product->name }} (Available Stock: {{ $product->stock }})
-                            </option>
-                        @endforeach
+                    <select id="product_id" name="product_id" class="form-select border-dark" required>
+                    <option value="">-- Choose Product --</option>
+
+                    @foreach($products as $product)
+                    <option
+                     value="{{ $product->id }}"
+                     data-price="{{ $product->price }}"
+                     {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                     {{ $product->name }} (Available Stock: {{ $product->stock }})
+                    </option>
+                    @endforeach
                     </select>
                 </div>
 
@@ -60,7 +64,16 @@
                     <label class="form-label font-weight-bold">Selling Price per unit:</label>
                     <div class="input-group">
                         <span class="input-group-text border-dark bg-secondary text-white">₱</span>
-                        <input type="number" step="0.01" name="selling_price" value="{{ old('selling_price') }}" class="form-control border-dark" placeholder="0.00" required>
+                        <input
+                        type="number"
+                        step="0.01"
+                        id="selling_price"
+                        name="selling_price"
+                        value="{{ old('selling_price') }}"
+                        class="form-control border-dark"
+                        placeholder="0.00"
+                        readonly
+                        required>
                     </div>
                 </div>
 
@@ -182,5 +195,9 @@
     <div class="footer-bumper-spacer"></div>
 
 </div> <!-- /container -->
+
+
+
+
 
 @endsection

@@ -50,7 +50,7 @@ class SalesController extends Controller
 
 
         // 🏛️ 1. Hanapin muna si product sa database para makilala siya ng computer
-        $product = Product::find($request->product_id);
+        $product = Product::findOrFail($request->product_id);
 
         // 🏛️ 2. Ngayong kilala na si $product, pwede na natin siyang i-tsek kung kulang ang stock
         if ($product && $product->stock < $request->quantity) {
@@ -67,6 +67,10 @@ class SalesController extends Controller
         //  $sale = Sales::create($request->validated()); <- dati ito yung sa baba na code na pilalit para maka pag record ng total sales sa database
         $data = $request->validated();
 
+        // Kunin ang tunay na presyo mula sa Product
+        $data['selling_price'] = $product->price;
+
+        // Compute ang line total gamit ang trusted price
         $data['line_total'] =
         $data['quantity'] * $data['selling_price'];
 
@@ -79,10 +83,8 @@ class SalesController extends Controller
     // closed activity logs
 
         // 🏛️ 4. Babawasan na natin ang stock dahil ligtas at na-save na ang transaksyon
-        if ($product) {
-            $product->stock -= $request->quantity;
-            $product->save();
-        }
+        $product->stock -= $request->quantity;
+        $product->save();
 
 
 // enter activity logs

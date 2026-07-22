@@ -127,6 +127,12 @@
 
 
     <!-- INIWAN ANG SAKTONG JS BUNDLE VERSION MO BRO -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+@if(request()->routeIs('sales.*'))
+    <script src="{{ asset('js/sales.js') }}"></script>
+@endif
+
 </body>
 </html>
